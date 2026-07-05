@@ -1,0 +1,144 @@
+﻿@page "/chat"
+@using Microsoft.AspNetCore.SignalR.Client
+@using ChatApp.Shared.Models
+@using BlazorChat.Services
+@inject HttpClient Http 
+@inject NavigationManager Navigation
+@inject UserState UserState 
+@implements IAsyncDisposable
+
+<h3>Global Chat</h3>
+
+@if (UserState.IsLoggedIn)
+{
+    <p>Logged in as: <strong>@UserState.Username</strong></p>
+}
+
+<div class="chat-window" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px;">
+    @foreach (var msg in listaMesaje)
+    {
+        <p><strong>@msg.UserName:</strong> @msg.Message <small style="color:gray;">@msg.SentAt.ToLocalTime().ToString("HH:mm")</small></p>
+    }
+</div>
+
+<input @bind="textMesaj" placeholder="Write a message..." style="width: 70%; padding: 5px;" />
+<button @onclick="TrimiteMesaj" disabled="@(!EsteConectat)" style="padding: 5px 15px;">Send</button>
+
+
+<hr style="margin-top: 50px;" />
+
+<div class="danger-zone" style="border: 1px solid #dc3545; padding: 15px; border-radius: 6px; background-color: #fff5f5;">
+    <h4 style="color: #dc3545; margin-top: 0;">Danger Zone</h4>
+    
+    @if (!showDeleteConfirmation)
+    {
+        <button @onclick="() => showDeleteConfirmation = true" style="background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
+            Delete My Account
+        </button>
+    }
+    else
+    {
+        <p style="color: #333;">This action is <strong>permanent</strong>. To confirm, type your username (<strong>@UserState.Username</strong>) below:</p>
+        
+        <input type="text" @bind-value="deleteConfirmationText" @bind-value:event="oninput" placeholder="Type your username to confirm..." style="width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #ccc;" />
+        
+        <button @onclick="ExecuteAccountDeletion" 
+                disabled="@(deleteConfirmationText != UserState.Username)" 
+                style="background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 4px;次 cursor: @(deleteConfirmationText == UserState.Username ? "pointer" : "not-allowed"); opacity: @(deleteConfirmationText == UserState.Username ? "1" : "0.5");">
+            Confirm Permanent Deletion
+        </button>
+        
+        <button @onclick="CancelDeletion" style="background-color: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 4px; margin-left: 10px; cursor: pointer;">
+            Cancel
+        </button>
+    }
+</div>
+
+@code {
+    private HubConnection? hubConnection;
+    private List<GlobalChat> listaMesaje = new List<GlobalChat>();
+    private string textMesaj = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Security Check: If user is not logged in, boot them back to the login page
+        if (!UserState.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        var istoric = await Http.GetFromJsonAsync<List<GlobalChat>>("api/globalchat");
+        if (istoric != null)
+        {
+            listaMesaje = istoric;
+        }
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7044/chathub") 
+            .Build();
+
+        hubConnection.On<GlobalChat>("ReceiveMessage", (mesajPrimitLive) =>
+        {
+            listaMesaje.Add(mesajPrimitLive); 
+            InvokeAsync(StateHasChanged); 
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task TrimiteMesaj()
+    {
+        if (hubConnection != null && !string.IsNullOrWhiteSpace(textMesaj))
+        {
+            // FIX: We now pass the string Username from UserState instead of the missing ID variable
+            await hubConnection.SendAsync("SendMessage", UserState.Username, textMesaj);
+            textMesaj = ""; 
+        }
+    }
+
+    public bool EsteConectat => hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection != null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+
+
+    private bool showDeleteConfirmation = false;
+    private string deleteConfirmationText = string.Empty;
+
+    private void CancelDeletion()
+    {
+        showDeleteConfirmation = false;
+        deleteConfirmationText = string.Empty;
+    }
+
+    private async Task ExecuteAccountDeletion()
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"api/user/delete/{UserState.Username}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Wipe user instance state tracking and route back to landing form
+                UserState.LogOut();
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                var serverError = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Deletion failed: {serverError}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Network error occurred: {ex.Message}");
+        }
+    }
+}

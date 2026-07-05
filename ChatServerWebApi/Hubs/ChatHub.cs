@@ -1,0 +1,35 @@
+﻿using Microsoft.AspNetCore.SignalR;
+using ChatServerWebApi.Models;
+using ChatServerWebApi.Repositories;
+using ChatApp.Shared.Models;
+
+namespace ChatServerWebApi.Hubs
+{
+    // Moștenim clasa Hub din SignalR
+    public class ChatHub : Hub
+    {
+        private readonly IGlobalChatRepository _globalChatRepository;
+
+        public ChatHub(IGlobalChatRepository globalChatRepository)
+        {
+            _globalChatRepository = globalChatRepository;
+        }
+
+        // This message will be called from the interface app(Blazor, etc.)
+        public async Task SendMessage(string userName, string messageText)
+        {
+            if (string.IsNullOrWhiteSpace(messageText)) return;
+
+            var noulMesaj = new GlobalChat
+            {
+                UserName = userName,
+                Message = messageText,
+                SentAt = DateTime.UtcNow 
+            };
+            await _globalChatRepository.AddAsync(noulMesaj);
+
+            // SignalR Magic: Send to all connected clients
+            await Clients.All.SendAsync("ReceiveMessage", noulMesaj);
+        }
+    }
+}
