@@ -28,6 +28,8 @@ namespace ChatApp.Application.Chats.Commands
             }
 
             await _globalChatRepository.DeleteAllAsync();
+
+            await _globalChatRepository.GetAllAsync();
         }
     }
 

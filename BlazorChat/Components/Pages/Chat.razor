@@ -70,7 +70,14 @@
         // Security Check: If user is not logged in, boot them back to the login page
         if (!UserState.IsLoggedIn)
         {
-            Navigation.NavigateTo("/login");
+            try
+            {
+                Navigation.NavigateTo("/login");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error in 'Chat.razor': {ex.Message}");
+            }
             return;
         }
 
@@ -87,6 +94,12 @@
         hubConnection.On<GlobalChat>("ReceiveMessage", (mesajPrimitLive) =>
         {
             listaMesaje.Add(mesajPrimitLive); 
+            InvokeAsync(StateHasChanged); 
+        });
+
+        hubConnection.On("ChatCleared", () =>
+        {
+            listaMesaje.Clear();
             InvokeAsync(StateHasChanged); 
         });
 
@@ -154,7 +167,7 @@
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("Chat cleared!");
+            Console.WriteLine("Chat cleared on server!");
         }
         else
         {
