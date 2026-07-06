@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ChatServerWebApi.Models;
-using ChatServerWebApi.Repositories;
+using ChatApp.Application.Common.Interfaces;
 using ChatApp.Shared.Models;
 
 namespace ChatServerWebApi.Hubs

@@ -1,9 +1,9 @@
-﻿using ChatServerWebApi.Models;
-using ChatServerWebApi.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ChatApp.Shared.Models;
+using ChatApp.Application.Common.Interfaces;
+using ChatApp.Infrastructure.Persistence;
 
-namespace ChatServerWebApi.Repositories
+namespace ChatApp.Infrastructure.Repositories
 {
     public class GlobalChatRepository : IGlobalChatRepository
     {
@@ -44,6 +44,10 @@ namespace ChatServerWebApi.Repositories
 
             _context.GlobalChat.Remove(message);
             await _context.SaveChangesAsync();
+        }
+        public async Task DeleteAllAsync()
+        {
+            await _context.GlobalChat.ExecuteDeleteAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ChatServerWebApi.Models
+﻿namespace ChatApp.Shared.Models
 {
     public class User
     {

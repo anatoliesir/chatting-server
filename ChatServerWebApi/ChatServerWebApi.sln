@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorChat", "..\BlazorChat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Shared", "..\ChatApp.Shared\ChatApp.Shared.csproj", "{DC6B030F-53AB-4374-82CC-347C934F6D8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Domain", "..\ChatApp.Domain\ChatApp.Domain.csproj", "{0B6E8AC7-32E5-4AA0-B15D-D89361DE458D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Application", "..\ChatApp.Application\ChatApp.Application.csproj", "{94308BB5-2D67-4F03-BFCD-7F2015663FAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Infrastructure", "..\ChatApp.Infrastructure\ChatApp.Infrastructure.csproj", "{DAB0E5E2-DCFB-4981-A3EF-E9627608F7A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{DC6B030F-53AB-4374-82CC-347C934F6D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC6B030F-53AB-4374-82CC-347C934F6D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC6B030F-53AB-4374-82CC-347C934F6D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6E8AC7-32E5-4AA0-B15D-D89361DE458D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6E8AC7-32E5-4AA0-B15D-D89361DE458D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6E8AC7-32E5-4AA0-B15D-D89361DE458D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6E8AC7-32E5-4AA0-B15D-D89361DE458D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94308BB5-2D67-4F03-BFCD-7F2015663FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94308BB5-2D67-4F03-BFCD-7F2015663FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94308BB5-2D67-4F03-BFCD-7F2015663FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94308BB5-2D67-4F03-BFCD-7F2015663FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB0E5E2-DCFB-4981-A3EF-E9627608F7A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB0E5E2-DCFB-4981-A3EF-E9627608F7A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB0E5E2-DCFB-4981-A3EF-E9627608F7A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB0E5E2-DCFB-4981-A3EF-E9627608F7A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

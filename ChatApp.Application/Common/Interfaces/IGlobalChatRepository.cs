@@ -1,7 +1,6 @@
-﻿using ChatServerWebApi.Models;
-using ChatApp.Shared.Models;
+﻿using ChatApp.Shared.Models;
 
-namespace ChatServerWebApi.Repositories
+namespace ChatApp.Application.Common.Interfaces
 {
     public interface IGlobalChatRepository
     {
@@ -10,5 +9,6 @@ namespace ChatServerWebApi.Repositories
         public Task AddAsync(GlobalChat message);
         public Task UpdateAsync(GlobalChat newMessage);
         public Task DeleteAsync(int id);
+        public Task DeleteAllAsync();
     }
 }

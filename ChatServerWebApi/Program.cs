@@ -1,8 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using ChatServerWebApi.Data;
-using Scalar.AspNetCore;
-using ChatServerWebApi.Repositories;
+using ChatApp.Infrastructure;
 using ChatServerWebApi.Hubs; // Added this to recognize ChatHub
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IGlobalChatRepository, GlobalChatRepository>();
-builder.Services.AddSignalR();
+// Add this line to register all Infrastructure services (DB, Repositories)
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// Add this line to register MediatR from the Application project
+builder.Services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(typeof(ChatApp.Application.Users.Commands.RegisterUserCommand).Assembly));
 
 var app = builder.Build();
 

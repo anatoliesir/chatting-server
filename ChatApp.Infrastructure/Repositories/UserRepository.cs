@@ -1,8 +1,9 @@
-﻿using ChatServerWebApi.Data;
-using ChatServerWebApi.Models;
+﻿using ChatApp.Application.Common.Interfaces;
+using ChatApp.Shared.Models;
+using ChatApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatServerWebApi.Repositories
+namespace ChatApp.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -12,15 +13,15 @@ namespace ChatServerWebApi.Repositories
             _context = context;
         }
 
-        public async Task<List<User>> GetAllAsync()
-        {
-            return await _context.Users.ToListAsync();
-        }
+        //public async Task<List<User>> GetAllAsync()
+        //{
+        //    return await _context.Users.ToListAsync();
+        //}
 
-        public async Task<User?> GetByIdAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
+        //public async Task<User?> GetByIdAsync(int id)
+        //{
+        //    return await _context.Users.FindAsync(id);
+        //}
 
         public async Task AddAsync(User user)
         {
@@ -28,17 +29,18 @@ namespace ChatServerWebApi.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(User newUser)
-        {
-            var oldUser = await _context.Users.FindAsync(newUser.Id);
-            if(oldUser == null)
-            {
-                return;
-            }
+        //public async Task UpdateAsync(User newUser)
+        //{
+        //    var oldUser = await _context.Users.FindAsync(newUser.Id);
+        //    if(oldUser == null)
+        //    {
+        //        return;
+        //    }
 
-            _context.Users.Entry(oldUser).CurrentValues.SetValues(newUser);
-            await _context.SaveChangesAsync();
-        }
+        //    _context.Users.Entry(oldUser).CurrentValues.SetValues(newUser);
+        //    await _context.SaveChangesAsync();
+        //}
+
         public async Task DeleteAsync(int id)
         {
             var user =  await _context.Users.FindAsync(id);
@@ -52,7 +54,6 @@ namespace ChatServerWebApi.Repositories
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
 
-            // If the user does not exist, return -1
             if (user == null) return null;
             return user;
         }
