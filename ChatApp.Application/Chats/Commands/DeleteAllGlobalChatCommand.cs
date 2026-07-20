@@ -1,5 +1,4 @@
-﻿using BlazorChat.Services;
-using ChatApp.Application.Common.Interfaces;
+﻿using ChatApp.Application.Common.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;

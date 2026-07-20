@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using ChatApp.Application.Common.Interfaces;
-using ChatApp.Shared.Models;
+using ChatApp.Domain.Entities;
 
 namespace ChatServerWebApi.Hubs
 {

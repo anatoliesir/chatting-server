@@ -1,5 +1,5 @@
 ﻿using ChatApp.Application.Common.Interfaces;
-using ChatApp.Shared.Models;
+using ChatApp.Domain.Entities;
 using MediatR;
 
 namespace ChatApp.Application.Users.Commands

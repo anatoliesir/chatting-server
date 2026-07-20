@@ -1,4 +1,4 @@
-﻿using ChatApp.Shared.Models;
+﻿using ChatApp.Domain.Entities;
 
 namespace ChatApp.Application.Common.Interfaces
 {

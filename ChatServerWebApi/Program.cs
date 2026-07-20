@@ -1,19 +1,20 @@
 using ChatApp.Infrastructure;
-using ChatServerWebApi.Hubs; // Added this to recognize ChatHub
+using ChatServerWebApi.Hubs; 
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+builder.Services.AddSignalR();
 
 // Add this line to register all Infrastructure services (DB, Repositories)
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add this line to register MediatR from the Application project
-builder.Services.AddMediatR(cfg => 
+builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ChatApp.Application.Users.Commands.RegisterUserCommand).Assembly));
 
 var app = builder.Build();
@@ -25,18 +26,31 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // CORS policy
 app.UseCors(policy => policy
-    .WithOrigins("https://localhost:7112", "http://localhost:5273")
+    .WithOrigins(
+        "https://localhost:7112",
+        "http://localhost:5273",
+        "http://localhost:5173"
+    )
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials());
 
 app.UseAuthorization();
 
+// For reactchat
+app.UseDefaultFiles(); 
+app.UseStaticFiles();
+
 app.MapControllers();
 app.MapHub<ChatHub>("/chathub");
+
+app.MapFallbackToFile("index.html");
 
 app.Run();

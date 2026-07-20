@@ -1,5 +1,5 @@
 ﻿using ChatApp.Application.Common.Interfaces;
-using ChatApp.Shared.Models;
+using ChatApp.Domain.Entities;
 using ChatApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿using ChatApp.Shared.Models;
+﻿using ChatApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Infrastructure.Persistence

@@ -1,6 +1,6 @@
 ﻿using ChatApp.Application.Users.Commands;
 using ChatApp.Application.Users.Queries;
-using ChatApp.Shared.Models;
+using ChatApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
