@@ -1,4 +1,4 @@
-using ChatApp.Infrastructure;
+﻿using ChatApp.Infrastructure;
 using ChatApp.Infrastructure.Persistence;
 using ChatServerWebApi.Hubs; 
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +19,22 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ChatApp.Application.Users.Commands.RegisterUserCommand).Assembly));
 
 var app = builder.Build();
+
+// Use this to automatically create a new migration to the postgresql database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate();
+        Console.WriteLine("--> Migrations were created successfully!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> Migration error: {ex.Message}");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -52,12 +68,5 @@ app.MapControllers();
 app.MapHub<ChatHub>("/chathub");
 
 app.MapFallbackToFile("index.html");
-
-// Use this to automatically create a new migration to the postgresql database
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); 
-    dbContext.Database.Migrate(); 
-}
 
 app.Run();
