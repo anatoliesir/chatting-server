@@ -1,4 +1,5 @@
 using ChatApp.Infrastructure;
+using ChatApp.Infrastructure.Persistence;
 using ChatServerWebApi.Hubs; 
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -51,5 +52,12 @@ app.MapControllers();
 app.MapHub<ChatHub>("/chathub");
 
 app.MapFallbackToFile("index.html");
+
+// Use this to automatically create a new migration to the postgresql database
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); 
+    dbContext.Database.Migrate(); 
+}
 
 app.Run();
