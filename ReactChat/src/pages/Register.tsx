@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 interface RegisterProps {
     onRegister: (user: string, pass: string, passRepeat: string) => Promise<void>;
@@ -16,9 +16,6 @@ export function Register({ onRegister, errorMsg, successMsg, changeView }: Regis
         <div className="max-w-md mx-auto mt-12 bg-white border border-gray-100 shadow-xl rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Create New Account</h3>
             <p className="text-sm text-gray-500 mb-6">Set up your profile credentials below.</p>
-
-            {errorMsg && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg font-medium">{errorMsg}</div>}
-            {successMsg && <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg font-medium">{successMsg}</div>}
 
             <div className="space-y-4 mb-6">
                 <div>
@@ -45,6 +42,19 @@ export function Register({ onRegister, errorMsg, successMsg, changeView }: Regis
                     Login here
                 </span>
             </div>
+
+
+            {(errorMsg || successMsg) && (
+                <div className="fixed top-5 right-5 z-50 animate-[bounce_1s_ease-out_4]">
+                    <div className={`px-4 py-3 rounded-xl shadow-2xl border text-sm font-medium flex items-center gap-2 ${errorMsg
+                        ? 'bg-red-500 text-white border-red-600'
+                        : 'bg-emerald-500 text-white border-emerald-600'
+                        }`}>
+                        <span>{errorMsg ? '⚠️' : '✓'}</span>
+                        <span>{errorMsg || successMsg}</span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -22,7 +22,7 @@ namespace ChatApp.Application.Users.Commands
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 throw new ArgumentException("Enter username and password!");
 
-            var existingUser = await _userRepository.GetByUsernameAsync(request.Username);
+            var existingUser = await _userRepository.GetByUsernameAsync(request.Username.Trim());
             if (existingUser != null)
                 throw new ArgumentException("Username is already taken!");
 
@@ -32,7 +32,7 @@ namespace ChatApp.Application.Users.Commands
             var newAccount = new User
             {
                 Id = 0, // Triggers EF Core auto-increment feature natively
-                UserName = request.Username,
+                UserName = request.Username.Trim(),
                 PasswordHash = securedPassword
             };
 

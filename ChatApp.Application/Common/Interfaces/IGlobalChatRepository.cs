@@ -10,5 +10,6 @@ namespace ChatApp.Application.Common.Interfaces
         public Task UpdateAsync(GlobalChat newMessage);
         public Task DeleteAsync(int id);
         public Task DeleteAllAsync();
+        public Task TrimMessagesAsync(int maxLimit);
     }
 }

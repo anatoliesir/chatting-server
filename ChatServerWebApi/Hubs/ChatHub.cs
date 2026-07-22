@@ -27,6 +27,9 @@ namespace ChatServerWebApi.Hubs
             };
             await _globalChatRepository.AddAsync(noulMesaj);
 
+            // If the message count surpasses the limit set in here, then it will proceed to delete the oldest messages
+            await _globalChatRepository.TrimMessagesAsync(100);
+
             // SignalR Magic: Send to all connected clients
             await Clients.All.SendAsync("ReceiveMessage", noulMesaj);
         }

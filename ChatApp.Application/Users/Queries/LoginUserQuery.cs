@@ -23,7 +23,7 @@ namespace ChatApp.Application.Users.Queries
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 return false;
 
-            var user = await _userRepository.GetByUsernameAsync(request.Username);
+            var user = await _userRepository.GetByUsernameAsync(request.Username.Trim());
             string hashForVerification = user?.PasswordHash ?? DummyHash;
 
             // Verify the plain text password against the secured hash

@@ -32,10 +32,9 @@ if (app.Environment.IsDevelopment())
 }
 
 // CORS policy
+// (used only when backend and frontend have different ports. If not, it will be ignored)
 app.UseCors(policy => policy
-    .WithOrigins(
-        "https://localhost:7112",
-        "http://localhost:5273",
+    .WithOrigins(        
         "http://localhost:5173"
     )
     .AllowAnyHeader()

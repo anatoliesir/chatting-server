@@ -6,6 +6,10 @@ import { Register } from './pages/Register';
 import { Chat } from './pages/Chat';
 import { Home } from './pages/Home'
 
+// https://localhost:7044
+
+// I deleted the base url, because 
+// if docker uses only one port, then it is useless to connect with the backend's port
 const BASE_URL = "";
 
 function App() {
@@ -45,7 +49,7 @@ function App() {
 
             if (response.ok) {
                 setSuccessMsg("Account created successfully! Redirecting to login...");
-                setTimeout(() => changeView('login'), 1500);
+                setTimeout(() => changeView('login'), 1000);
             } else {
                 const text = await response.text();
                 setErrorMsg(text || "Registration failed.");
@@ -74,7 +78,7 @@ function App() {
                 setUsername(user);
                 setIsLoggedIn(true);
                 
-                setTimeout(() => changeView('chat'), 1500);
+                setTimeout(() => changeView('chat'), 1000);
             } else {
                 const text = await response.text();
                 setErrorMsg(text || "Invalid credentials.");
@@ -92,6 +96,18 @@ function App() {
         }
         changeView('login');
     };
+
+
+    useEffect(() => {
+        if (errorMsg || successMsg) {
+            const timer = setTimeout(() => {
+                setErrorMsg('');
+                setSuccessMsg('');
+            }, 4000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [errorMsg, successMsg]);
 
     useEffect(() => {
         if (view !== 'chat' || !isLoggedIn) return;

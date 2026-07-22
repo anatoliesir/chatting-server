@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 interface LoginProps {
     onLogin: (user: string, pass: string) => Promise<void>;
@@ -15,9 +15,7 @@ export function Login({ onLogin, errorMsg, successMsg }: LoginProps) {
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h3>
             <p className="text-sm text-gray-500 mb-6">Sign in to join the live global chatroom.</p>
 
-            {errorMsg && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg font-medium">{errorMsg}</div>}
-            {successMsg && <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg font-medium">{successMsg}</div>}
-
+            
             <div className="space-y-4 mb-6">
                 <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Username</label>
@@ -31,7 +29,21 @@ export function Login({ onLogin, errorMsg, successMsg }: LoginProps) {
 
             <button onClick={() => onLogin(loginUser, loginPass)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md shadow-indigo-500/10 transition-all active:scale-[0.98]">
                 Sign In
-            </button>
+            </button>     
+
+
+            {(errorMsg || successMsg) && (
+                <div className="fixed top-5 right-5 z-50 animate-[bounce_1s_ease-out_4]">
+                    <div className={`px-4 py-3 rounded-xl shadow-2xl border text-sm font-medium flex items-center gap-2 ${errorMsg
+                            ? 'bg-red-500 text-white border-red-600'
+                            : 'bg-emerald-500 text-white border-emerald-600'
+                        }`}>
+                        <span>{errorMsg ? '⚠️' : '✓'}</span>
+                        <span>{errorMsg || successMsg}</span>
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 }

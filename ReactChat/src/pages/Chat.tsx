@@ -68,6 +68,15 @@ export function Chat({
         }
     }, [messages]);
 
+
+
+    // Go to the latest messages when logging in.
+    useEffect(() => {
+        if (!chatContainerRef.current) return;
+
+        setTimeout(() => scrollToBottom(), 200)
+    }, [isConnected]);
+
     return (
         <div className="max-w-4xl mx-auto bg-white border border-gray-100 shadow-xl rounded-2xl overflow-hidden flex flex-col h-[650px]">
             <div className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">

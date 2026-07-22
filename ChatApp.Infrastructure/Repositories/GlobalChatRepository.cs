@@ -49,5 +49,24 @@ namespace ChatApp.Infrastructure.Repositories
         {
             await _context.GlobalChat.ExecuteDeleteAsync();
         }
+
+        public async Task TrimMessagesAsync(int maxLimit)
+        {
+            var totalMessages = await _context.GlobalChat.CountAsync();
+
+            if (totalMessages > maxLimit)
+            {
+                int excessCount = totalMessages - maxLimit;
+
+                // Delete the oldest messages, by selecting them by the time (SentAt)
+                var oldestMessages = await _context.GlobalChat
+                    .OrderBy(m => m.SentAt)
+                    .Take(excessCount)
+                    .ToListAsync();
+
+                _context.GlobalChat.RemoveRange(oldestMessages);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
