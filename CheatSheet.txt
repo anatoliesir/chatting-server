@@ -1,0 +1,1 @@
+Add-Migration InitialCreate -Project ChatApp.Infrastructure -StartupProject ChatServerWebApi
