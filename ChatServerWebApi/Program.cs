@@ -20,15 +20,21 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
-// Use this to automatically create a new migration to the postgresql database
+
+// Connect to postgresql database
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    db.Database.Migrate();
-
-    var canConnect = db.Database.CanConnect();
-    Console.WriteLine($"--> Conexiune DB: {canConnect}");
+    var services = scope.ServiceProvider;
+    try
+    {
+        var db = services.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+        Console.WriteLine("--> SUCCESS: Baza de date a fost migrată cu succes pe Render!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> EROARE la migrare: {ex.Message}");
+    }
 }
 
 // Configure the HTTP request pipeline.
