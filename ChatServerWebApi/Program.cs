@@ -23,17 +23,12 @@ var app = builder.Build();
 // Use this to automatically create a new migration to the postgresql database
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
-        Console.WriteLine("--> Migrations were created successfully!");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"--> Migration error: {ex.Message}");
-    }
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    db.Database.Migrate();
+
+    var canConnect = db.Database.CanConnect();
+    Console.WriteLine($"--> Conexiune DB: {canConnect}");
 }
 
 // Configure the HTTP request pipeline.
