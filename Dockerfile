@@ -23,7 +23,6 @@ COPY ["ChatServerWebApi/ChatServerWebApi.csproj", "ChatServerWebApi/"]
 COPY ["ChatApp.Application/ChatApp.Application.csproj", "ChatApp.Application/"]
 COPY ["ChatApp.Domain/ChatApp.Domain.csproj", "ChatApp.Domain/"]
 COPY ["ChatApp.Infrastructure/ChatApp.Infrastructure.csproj", "ChatApp.Infrastructure/"]
-COPY ["ChatApp.Shared/ChatApp.Shared.csproj", "ChatApp.Shared/"]
 
 RUN dotnet restore "ChatServerWebApi/ChatServerWebApi.csproj"
 
