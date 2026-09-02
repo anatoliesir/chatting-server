@@ -37,13 +37,13 @@ RUN dotnet publish "ChatServerWebApi.csproj" -c Release -o /app/publish /p:UseAp
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
-# Copiem executabilul C# compilat
-COPY --from=backend-build /app/publish .
+# Reducem consumul de memorie RAM pentru a preveni crash-ul 139 pe Render
+ENV DOTNET_SERVER_GC=0
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
-# Copiem fișierele statice din React în folderul wwwroot din C#
+COPY --from=backend-build /app/publish .
 COPY --from=frontend-build /app/frontend/dist ./wwwroot
 
-# Setăm portul pe care va asculta containerul
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
